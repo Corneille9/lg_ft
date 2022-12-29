@@ -3,7 +3,8 @@ import 'package:lg_ft/lg_ft/components/_task_actions_bottom_sheet.dart';
 import 'package:lg_ft/lg_ft/components/_task_item_builder.dart';
 
 class TaskBacklogBuilder extends StatelessWidget {
-  const TaskBacklogBuilder({Key? key}) : super(key: key);
+  const TaskBacklogBuilder({Key? key, required this.name}) : super(key: key);
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class TaskBacklogBuilder extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Backlog", ),
+              Text(name),
               IconButton(
                   onPressed: () {
                     TaskActionsBottomSheet.show(context: context);
@@ -31,7 +32,7 @@ class TaskBacklogBuilder extends StatelessWidget {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 4,
+            itemCount: 2,
             itemBuilder: (context, index) => TaskItemBuilder(index: index,),
           ),
           TextButton(

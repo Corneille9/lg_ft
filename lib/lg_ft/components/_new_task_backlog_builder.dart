@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:lg_ft/lg_ft/components/_task_item_builder.dart';
 
 import '_custom_widgets.dart';
 
 class NewTaskBackLogBuilder extends StatelessWidget {
-  NewTaskBackLogBuilder({Key? key, this.onAddTask}) : super(key: key);
+  NewTaskBackLogBuilder({Key? key, this.onAdd}) : super(key: key);
 
   final ValueNotifier<List<Widget>> tasks = ValueNotifier([]);
 
   ///Call this when new task added [Scroll down taskBacklogs listview]
-  final VoidCallback? onAddTask;
+  final Function(String name)? onAdd;
+
+  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +23,13 @@ class NewTaskBackLogBuilder extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const CustomTextField(
+          CustomTextField(
             hintText: "???????",
+            controller: controller,
           ),
           ValueListenableBuilder(
               valueListenable: tasks,
               builder: (context, value, child) {
-
-                WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                  onAddTask?.call();
-                });
-
                 return ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -50,8 +47,9 @@ class NewTaskBackLogBuilder extends StatelessWidget {
               ),
               TextButton(
                   onPressed: () {
-                    /// Add add new task to taskBacklog |??????????????????????????????????????
-                    tasks.value = tasks.value + [TaskItemBuilder(index: tasks.value.length)];
+                    /// Add add new taskBacklog to taskBacklogList |??????????????????????????????????????
+                    if(controller.text.trim().isEmpty)return;
+                    onAdd?.call(controller.text);
                   },
                   child: const Text("Ajouter")
               )

@@ -9,7 +9,7 @@ class TaskBackLogListScreen extends StatelessWidget {
   //Use to notify searchTextField visibility
   final ValueNotifier<bool> showSearchField = ValueNotifier(false);
 
-  final ValueNotifier<List<Widget>> taskBacklogs = ValueNotifier([const TaskBacklogBuilder()]);
+  final ValueNotifier<List<Widget>> taskBacklogs = ValueNotifier([const TaskBacklogBuilder(name: "Backlog",)]);
 
   final ScrollController scrollController = ScrollController();
 
@@ -61,7 +61,14 @@ class TaskBackLogListScreen extends StatelessWidget {
                 IconButton(
                     onPressed: () {
                       ///Add new taskBacklog , See [NewTaskBackLogBuilder]
-                      taskBacklogs.value = taskBacklogs.value +  [NewTaskBackLogBuilder()];
+                      GlobalKey key = GlobalKey();
+                      taskBacklogs.value = taskBacklogs.value +  [NewTaskBackLogBuilder(
+                        key: key,
+                        onAdd: (name) {
+                          taskBacklogs.value.removeWhere((element) => element.key==key);
+                          taskBacklogs.value = taskBacklogs.value + [TaskBacklogBuilder(name: name)];
+                        },
+                      )];
                       ///Use to prevent taskBacklogs listview scroll end
                       scrollToEnd = true;
                     },
